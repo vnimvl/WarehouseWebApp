@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<center><h2>Dodaj / Usuń produkt</h2></center>
+<center><h2>Lista Produktów</h2></center>
 
 <form method="post">
     <div class="form-row">
@@ -36,4 +36,24 @@
     </center>
 </form>
 
+
+
 @await Component.InvokeAsync("Produkty")
+
+<br />
+<br />
+<form method="post">
+    <div class="form-group col-md-10">
+        <input name="serial" class="form-control" placeholder="Wprowadź numer seryjny produktu" />
+        <span asp-validation-for="SerialNumber" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success col-md-2" asp-action="Search">Wyszukaj</button>
+</form>
+<br />
+
+@{ 
+    var Query = ViewBag.query;
+}
+@await Component.InvokeAsync("WyszukiwarkaProduktow", new { serial = Convert.ToInt32(Query) })
+
+

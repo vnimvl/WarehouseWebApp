@@ -20,8 +20,9 @@ namespace WarehouseWebApp.Controllers
             _products = products;
 
         }
-        public IActionResult Index()
+        public IActionResult Index(int serial)
         {
+            ViewBag.query = serial;
             return View();
         }
 
@@ -55,9 +56,13 @@ namespace WarehouseWebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult Search(int serial)
+        {
+            return RedirectToAction("Index", new { serial });
+        }
 
-
-        [HttpGet]
+        [HttpPost]
         public IActionResult Sumuj()
         {
             _products.SumujAktywnePozycje();

@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using WarehouseWebApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WarehouseWebApp.Service;
 
 namespace WarehouseWebApp
 {
@@ -36,9 +37,11 @@ namespace WarehouseWebApp
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("AzureConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<IProductRepository, ProductRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

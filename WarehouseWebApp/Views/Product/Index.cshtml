@@ -1,0 +1,39 @@
+﻿@model WarehouseWebApp.Models.Products
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<center><h2>Dodaj / Usuń produkt</h2></center>
+
+<form method="post">
+    <div class="form-row">
+
+        <div class="form-group col-md-3">
+            <label asp-for="SerialNumber" class="control-label"></label>
+            <input asp-for="SerialNumber" class="form-control" />
+            <span asp-validation-for="SerialNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Count" class="control-label"></label>
+            <input asp-for="Count" class="form-control" />
+            <span asp-validation-for="Count" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="IsActive" class="control-label"></label>
+            <input asp-for="IsActive" class="form-control" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+    <center>
+        <button type="submit" class="btn btn-success" asp-action="Create">Create</button>
+        <button type="submit" class="btn btn-danger" asp-action="Delete" disabled>Delete</button>
+    </center>
+</form>
+
+@await Component.InvokeAsync("Produkty")

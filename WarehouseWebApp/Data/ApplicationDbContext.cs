@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WarehouseWebApp.Models;
 
 namespace WarehouseWebApp.Data
 {
@@ -12,5 +13,6 @@ namespace WarehouseWebApp.Data
             : base(options)
         {
         }
+        public DbSet<Products> Produkty { get; set; }
     }
 }

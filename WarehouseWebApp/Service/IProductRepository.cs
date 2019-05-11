@@ -10,9 +10,10 @@ namespace WarehouseWebApp.Service
     {
         IQueryable<Products> Produkty { get; }
 
-        void AddProduct(Products ProductData);
+        void AddProduct(Products ProductData); //dodanie nowego produktu
         void DeleteProduct(Products ProductData);
         void EditProduct(Products EditProduct);
+        void SumujAktywnePozycje(); // wszystkie aktywne produkty z takim samym kodem zostaną podliczone
 
     }
 }

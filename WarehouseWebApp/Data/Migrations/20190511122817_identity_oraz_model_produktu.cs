@@ -20,7 +20,7 @@ namespace WarehouseWebApp.Data.Migrations
                     VAT = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false)
-                },
+                }, 
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Produkty", x => x.Id);

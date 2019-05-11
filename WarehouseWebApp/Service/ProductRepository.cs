@@ -48,5 +48,45 @@ namespace WarehouseWebApp.Service
         {
             throw new NotImplementedException();
         }
+
+        public void SumujAktywnePozycje()
+        {
+            var WszystkieProdukty = _context.Produkty.Where(p => p.IsActive == true).OrderBy(p=>p.SerialNumber).ToList();
+            int liczbaElementow = WszystkieProdukty.Count();
+
+            // PROCES SUMOWANIA I USTAWIANIA WARTOSCI -1 DLA ELEMENTOW ZSUMOWANYCH PRZEZNACZONYCH DO POZNIEJSZEGO USUNIECIA
+            int index = 0;
+            
+            for (int i = 1; i < liczbaElementow; i++)
+            {
+                var ProduktBazowy = WszystkieProdukty.ElementAt(index);
+                var ProduktDoZsumowania = WszystkieProdukty.ElementAt(i);
+
+                if(ProduktBazowy.SerialNumber == ProduktDoZsumowania.SerialNumber)
+                    {
+                        ProduktBazowy.Count += ProduktDoZsumowania.Count;
+                    ProduktDoZsumowania.Count = -666;
+
+                        _context.Produkty.Update(ProduktBazowy);
+                        _context.Produkty.Update(ProduktDoZsumowania);
+
+                }
+                else
+                {
+                    index = i;
+                }
+            }
+            _context.SaveChanges();
+
+            //USUWANIE ELEMENTOW Z FLAGĄ -666
+            foreach (var Produkt in WszystkieProdukty)
+            {
+                if (Produkt.Count == -666)
+                {
+                    _context.Produkty.Remove(Produkt);
+                }
+            }
+            _context.SaveChanges();
+        }
     }
 }

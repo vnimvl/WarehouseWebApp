@@ -35,5 +35,12 @@ namespace WarehouseWebApp.Controllers
         {
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult Sumuj()
+        {
+            _products.SumujAktywnePozycje();
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -41,14 +41,22 @@ namespace WarehouseWebApp.Service
             _context.SaveChanges();
         }
 
-        public void DeleteProduct(Products ProductData)
+        public void DeleteProduct(int Id)
         {
-            throw new NotImplementedException();
+            var Produkt = _context.Produkty.Where(p => p.Id == Id).Single();
+            _context.Remove(Produkt);
+            _context.SaveChanges();
         }
 
-        public void EditProduct(Products EditProduct)
+        public void SaveChanges(Products produkt)
         {
-            throw new NotImplementedException();
+            _context.Update(produkt);
+            _context.SaveChanges();
+        }
+
+        public Products SelectProductById(int id)
+        {
+            return _context.Produkty.Where(p => p.Id == id).Single();
         }
 
         public void SumujAktywnePozycje()

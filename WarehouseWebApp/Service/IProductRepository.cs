@@ -11,9 +11,9 @@ namespace WarehouseWebApp.Service
         IQueryable<Products> Produkty { get; }
 
         void AddProduct(Products ProductData); //dodanie nowego produktu
-        void DeleteProduct(Products ProductData);
-        void EditProduct(Products EditProduct);
+        void DeleteProduct(int Id);
         void SumujAktywnePozycje(); // wszystkie aktywne produkty z takim samym kodem zostaną podliczone
-
+        Products SelectProductById(int id);
+        void SaveChanges(Products produkt);
     }
 }

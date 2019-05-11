@@ -32,13 +32,32 @@ namespace WarehouseWebApp.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult Delete(Products product)
+        [HttpGet]
+        public IActionResult Delete(int Id)
         {
+            _products.DeleteProduct(Id);
             return RedirectToAction("Index");
         }
 
+        public ViewResult Edit(int Id)=> View(_products.SelectProductById(Id)); // przekazanie do widoku danych produktu zgodnie  zmodelem
+
         [HttpPost]
+        public IActionResult Edit(Products Produkt)     //pobranie zedytowanych danych i zapisanie ich
+        {
+            if (ModelState.IsValid)
+            {
+                _products.SaveChanges(Produkt);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(Produkt);   // jezeli dane sa niepoprzwne strona zostanie załądowan aponownie
+            }
+        }
+
+
+
+        [HttpGet]
         public IActionResult Sumuj()
         {
             _products.SumujAktywnePozycje();

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WarehouseWebApp.Models;
 using WarehouseWebApp.Service;
 
 namespace WarehouseWebApp.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         //private ApplicationDbContext _context;

@@ -32,7 +32,9 @@ namespace WarehouseWebApp.Service
                 //Description = ProductData.Description,
                 Description = "Brak Opisu",
 
-                IsActive = ProductData.IsActive
+                IsActive = ProductData.IsActive,
+
+                ShipmenDate = DateTime.Now
             };
 
             _context.Produkty.Add(NowyProdukt);

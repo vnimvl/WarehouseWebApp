@@ -14,7 +14,8 @@ namespace WarehouseWebApp.Models
         public float Price { get; set; }
         public int VAT { get; set; }
         public string Description { get; set; }
-
+        public DateTime ShipmenDate { get; set; }
+        
         public bool IsActive { get; set; }
     }
 }

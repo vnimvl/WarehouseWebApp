@@ -46,7 +46,7 @@
         </div>
         <div class="form-group col-md-3">
             <label asp-for="KategorieId" class="control-label"></label>
-            <select asp-for="KategorieId" class="form-control" asp-items="@{new SelectList(ViewBag.kategorie,"Id","Name")}">
+            <select asp-for="KategorieId" class="form-control" asp-items="@{new SelectList(ViewBag.kategorie, "Id", "Name")}">
             </select>
             <span asp-validation-for="KategorieId" class="text-danger"></span>
         </div>
@@ -76,9 +76,8 @@
 
 @{ 
     var Query = ViewBag.query;
-}
-@if (Query != 0)
-{
-    await Component.InvokeAsync("WyszukiwarkaProduktow", new { serial = Convert.ToInt32(Query) });
-}
-
+    }
+<br />
+<br />
+@await Component.InvokeAsync("WyszukiwarkaProduktow", new { serial = Query });
+<br />

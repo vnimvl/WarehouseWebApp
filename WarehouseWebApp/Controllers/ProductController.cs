@@ -75,6 +75,7 @@ namespace WarehouseWebApp.Controllers
         [HttpGet]
         public IActionResult RaportZDnia(DateTime dataStart, DateTime dataKoniec)
         {
+            ViewBag.kategorie = _context.Kategorie.ToList();
             ViewBag.dataStart = dataStart;
             ViewBag.dataKoniec = dataKoniec;
             return View();

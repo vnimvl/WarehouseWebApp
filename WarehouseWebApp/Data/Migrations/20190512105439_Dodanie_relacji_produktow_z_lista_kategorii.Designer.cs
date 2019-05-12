@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseWebApp.Data;
 
 namespace WarehouseWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190512105439_Dodanie_relacji_produktow_z_lista_kategorii")]
+    partial class Dodanie_relacji_produktow_z_lista_kategorii
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,7 +196,11 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("ProductsId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductsId");
 
                     b.ToTable("Kategorie");
                 });
@@ -238,8 +244,6 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int?>("KategorieId");
-
                     b.Property<string>("Name");
 
                     b.Property<float>("Price");
@@ -251,8 +255,6 @@ namespace WarehouseWebApp.Data.Migrations
                     b.Property<int>("VAT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("KategorieId");
 
                     b.ToTable("Produkty");
                 });
@@ -302,11 +304,11 @@ namespace WarehouseWebApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WarehouseWebApp.Models.Products", b =>
+            modelBuilder.Entity("WarehouseWebApp.Models.Kategorie", b =>
                 {
-                    b.HasOne("WarehouseWebApp.Models.Kategorie")
-                        .WithMany("Produkt")
-                        .HasForeignKey("KategorieId");
+                    b.HasOne("WarehouseWebApp.Models.Products")
+                        .WithMany("Kategoria")
+                        .HasForeignKey("ProductsId");
                 });
 #pragma warning restore 612, 618
         }

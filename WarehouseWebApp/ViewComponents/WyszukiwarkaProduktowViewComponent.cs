@@ -17,18 +17,18 @@ namespace WarehouseWebApp.ViewComponents
 
         public IViewComponentResult Invoke(int serial, DateTime dataStart, DateTime dataKoniec)
         {
-            if (dataStart == null && dataKoniec == null)
+            if (serial >0)
             {
                 var konkretneProdukty = _produktyCtx.Produkty.Where(p => p.SerialNumber == serial).ToList();
                 return View("Default", konkretneProdukty);
-            }
-            else
+            }else
+            if(serial == 0 || dataStart != null || dataKoniec != null)
             {
-
                 var produktyZDanegoDnia = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart || p.ShipmenDate <= dataKoniec).ToList();
                 return View("WybranyDzien", produktyZDanegoDnia);
             }
-
+             var pusta = _produktyCtx.Produkty.Where(p => p.SerialNumber == 0).ToList();
+             return View("Default", pusta);
         }
     }
 }

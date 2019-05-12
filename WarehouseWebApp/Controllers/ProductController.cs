@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WarehouseWebApp.Data;
 using WarehouseWebApp.Models;
 using WarehouseWebApp.Service;
 
@@ -12,16 +13,17 @@ namespace WarehouseWebApp.Controllers
     [Authorize]
     public class ProductController : Controller
     {
-        //private ApplicationDbContext _context;
+        private ApplicationDbContext _context;
         private readonly IProductRepository _products;
-        public ProductController(/*ApplicationDbContext context,*/ IProductRepository products)
+        public ProductController(ApplicationDbContext context, IProductRepository products)
         {
-            //_context = context;
+            _context = context;
             _products = products;
 
         }
         public IActionResult Index(int serial)
         {
+            ViewBag.kategorie = _context.Kategorie.ToList();
             ViewBag.query = serial;
             return View();
         }

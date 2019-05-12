@@ -5,7 +5,7 @@
 }
 
 <center><h2>Lista Produktów</h2></center>
-
+<div>
 <form method="post">
     <div class="form-row">
 
@@ -44,13 +44,21 @@
             <input asp-for="IsActive" class="form-control" />
             <span asp-validation-for="IsActive" class="text-danger"></span>
         </div>
+        <div class="form-group col-md-3">
+            <label asp-for="KategorieId" class="control-label"></label>
+            <select asp-for="KategorieId" class="form-control" asp-items="@{new SelectList(ViewBag.kategorie,"Id","Name")}">
+            </select>
+            <span asp-validation-for="KategorieId" class="text-danger"></span>
+        </div>
     </div>
     <center>
         <button type="submit" class="btn btn-success" asp-action="Create">Create</button>
         <button type="submit" class="btn btn-info" asp-action="Sumuj">Sumuj Aktywne</button>
     </center>
 </form>
-
+    </div>
+<br />
+<br />
 
 
 @await Component.InvokeAsync("Produkty")
@@ -69,6 +77,8 @@
 @{ 
     var Query = ViewBag.query;
 }
-@await Component.InvokeAsync("WyszukiwarkaProduktow", new { serial = Convert.ToInt32(Query) })
-
+@if (Query != 0)
+{
+    await Component.InvokeAsync("WyszukiwarkaProduktow", new { serial = Convert.ToInt32(Query) });
+}
 

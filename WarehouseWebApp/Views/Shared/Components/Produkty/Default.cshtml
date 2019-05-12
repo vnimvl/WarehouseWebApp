@@ -43,6 +43,7 @@
                 <th>
                    Data Dostawy
                 </th>
+                <th>Kategoria</th>
                 <th></th>
             </tr>
         </thead>
@@ -76,6 +77,24 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ShipmenDate)
+                </td>
+                <td>
+                    @{
+                        List<Kategorie> Kategorie = ViewBag.Kategorie;
+                    }
+                    @{
+                        if (item.KategorieId != null)
+                        {
+                            foreach (var typ in Kategorie)
+                            {
+                                if (typ.Id == item.KategorieId)
+                                {
+                                     <text> @typ.Name.ToString() </text>
+                                }
+                            }
+                        }
+                     }
+
                 </td>
                 <td>
                     <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id">usuń</a> |

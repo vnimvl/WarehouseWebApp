@@ -24,17 +24,12 @@ namespace WarehouseWebApp.Service
                 SerialNumber = ProductData.SerialNumber,
                 Name = ProductData.Name,
                 Count = ProductData.Count,
-
-                //Price = ProductData.Price,
-                Price = 0.01f,
-                //VAT = ProductData.VAT,
-                VAT = 23,
-                //Description = ProductData.Description,
-                Description = "Brak Opisu",
-
+                Price = ProductData.Price,
+                VAT = ProductData.VAT,
+                Description = ProductData.Description,
                 IsActive = ProductData.IsActive,
-
-                ShipmenDate = DateTime.Now
+                ShipmenDate = DateTime.Now,
+                KategorieId = ProductData.KategorieId
             };
 
             _context.Produkty.Add(NowyProdukt);

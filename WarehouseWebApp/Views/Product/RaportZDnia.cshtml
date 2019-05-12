@@ -1,0 +1,30 @@
+﻿@model WarehouseWebApp.Models.Products
+
+@{
+    ViewData["Title"] = "RaportZDnia";
+}
+
+<h2>RaportZDnia</h2>
+<br />
+<br />
+<form method="post">
+    <div class="form-group col-md-9">
+        <div class="form-group col-md-3">
+            <input type="date" name="dataStart" class="form-control" placeholder="wybierz date początkową" />
+            <span asp-validation-for="ShipmenDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <input type="date" name="dataKoniec" class="form-control" placeholder="wybierz date końcową" />
+            <span asp-validation-for="ShipmenDate" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success col-md-2" asp-controller="Product" asp-action="Search">Wyszukaj</button>
+        </div>
+</form>
+<br />
+@{
+    var Query1 = ViewBag.dataStart;
+    var Query2 = ViewBag.dataKoniec;
+}
+@await Component.InvokeAsync("WyszukiwarkaProduktow", new { dataStart = Query1, dataKoniec = Query2 })
+
+

@@ -57,9 +57,25 @@ namespace WarehouseWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(int serial)
+        public IActionResult Search(int serial, string dataStart, string dataKoniec)
         {
-            return RedirectToAction("Index", new { serial });
+            if(serial > 0)
+            {
+                return RedirectToAction("Index", new { serial });
+            }
+            if (dataStart != null && dataKoniec !=null )
+            {
+                return RedirectToAction("RaportZDnia", new { dataStart,dataKoniec });
+            }
+            else return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult RaportZDnia(DateTime dataStart, DateTime dataKoniec)
+        {
+            ViewBag.dataStart = dataStart;
+            ViewBag.dataKoniec = dataKoniec;
+            return View();
         }
 
         [HttpPost]

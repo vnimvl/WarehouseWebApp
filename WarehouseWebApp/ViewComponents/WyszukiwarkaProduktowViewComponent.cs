@@ -15,10 +15,20 @@ namespace WarehouseWebApp.ViewComponents
             _produktyCtx = produktyCtx;
         }
 
-        public IViewComponentResult Invoke(int serial)
+        public IViewComponentResult Invoke(int serial, DateTime dataStart, DateTime dataKoniec)
         {
-            var konkretneProdukty = _produktyCtx.Produkty.Where(p=>p.SerialNumber == serial).ToList();
-            return View("Default", konkretneProdukty);
+            if (dataStart == null && dataKoniec == null)
+            {
+                var konkretneProdukty = _produktyCtx.Produkty.Where(p => p.SerialNumber == serial).ToList();
+                return View("Default", konkretneProdukty);
+            }
+            else
+            {
+
+                var produktyZDanegoDnia = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart || p.ShipmenDate <= dataKoniec).ToList();
+                return View("WybranyDzien", produktyZDanegoDnia);
+            }
+
         }
     }
 }

@@ -14,5 +14,6 @@ namespace WarehouseWebApp.Data
         {
         }
         public DbSet<Products> Produkty { get; set; }
+        public DbSet<Klient> Klienci { get; set; }
     }
 }

@@ -15,5 +15,9 @@ namespace WarehouseWebApp.Service
         void SumujAktywnePozycje(); // wszystkie aktywne produkty z takim samym kodem zostaną podliczone
         Products SelectProductById(int id);
         void SaveChanges(Products produkt);
+
+        float SumujWszystkieWartosci(List<Products> produktyZDanegoDnia);
+        float SumujWarosciAktywnychPozycji(List<Products> produktyZDanegoDnia);
+        float SumujWartosciNieaktywnychPozycji(List<Products> produktyZDanegoDnia);
     }
 }

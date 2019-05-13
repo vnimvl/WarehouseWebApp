@@ -18,7 +18,7 @@
             <span asp-validation-for="ShipmenDate" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-success col-md-2" asp-controller="Product" asp-action="Search">Wyszukaj</button>
-        </div>
+    </div>
 </form>
 <br />
 @{
@@ -26,5 +26,3 @@
     var Query2 = ViewBag.dataKoniec;
 }
 @await Component.InvokeAsync("WyszukiwarkaProduktow", new { dataStart = Query1, dataKoniec = Query2 })
-
-

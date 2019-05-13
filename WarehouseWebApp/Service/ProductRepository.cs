@@ -93,5 +93,41 @@ namespace WarehouseWebApp.Service
             }
             _context.SaveChanges();
         }
+
+        public float SumujWarosciAktywnychPozycji(List<Products> produktyZDanegoDnia)
+        {
+            var suma = 0.0f;
+
+            foreach (var produkt in produktyZDanegoDnia.Where(p=>p.IsActive==true))
+            {
+                suma += (produkt.Count * produkt.Price);
+            }
+
+            return suma;
+        }
+
+        public float SumujWartosciNieaktywnychPozycji(List<Products> produktyZDanegoDnia)
+        {
+            var suma = 0.0f;
+
+            foreach (var produkt in produktyZDanegoDnia.Where(p => p.IsActive == false))
+            {
+                suma += (produkt.Count * produkt.Price);
+            }
+
+            return suma;
+        }
+
+        public float SumujWszystkieWartosci(List<Products> produktyZDanegoDnia)
+        {
+            var suma = 0.0f;
+
+            foreach(var produkt in produktyZDanegoDnia)
+            {
+                suma += (produkt.Count * produkt.Price); 
+            }
+
+            return suma;
+        }
     }
 }

@@ -21,11 +21,17 @@ namespace WarehouseWebApp.ViewComponents
             var konkretneProdukty = _produktyCtx.Produkty.Where(p => p.SerialNumber == serial).ToList();
             if (serial > 0 || dataStart == null || dataKoniec == null)
             {
+
+                
                 return View("Default", konkretneProdukty);
             }else
             if(serial == 0 || dataStart != null || dataKoniec != null)
             {
                 var produktyZDanegoDnia = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec.AddDays(1)).ToList();
+                ViewBag.SumaWartosciWszystkichElementow = _produktyCtx.SumujWszystkieWartosci(produktyZDanegoDnia);
+                ViewBag.SumaWartosciAktywnychPozycji = _produktyCtx.SumujWarosciAktywnychPozycji(produktyZDanegoDnia);
+                ViewBag.SumaWartosciNieaktywnychPozycj = _produktyCtx.SumujWartosciNieaktywnychPozycji(produktyZDanegoDnia);
+
                 return View("WybranyDzien", produktyZDanegoDnia);
             }
  

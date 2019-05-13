@@ -103,5 +103,38 @@
             }
         </tbody>
     </table>
+
+    <br />
+
+    @if (ViewBag.dataStart != null)
+    {
+    <table class="table">
+        <thead>
+            <tr>
+                <th  colspan="3">Podsumowanie</th>
+            </tr>
+            </thead>
+        <tbody>
+            <tr>
+                <td> Wszystkich Elelemtów </td>
+                <td> Liczba pozycji: @Model.Count() </td>
+                <td> Wartość całk. = @ViewBag.SumaWartosciWszystkichElementow</td>
+            </tr>
+            <tr>
+                <td> Pozycjie Aktywne </td>
+                <td> Liczba pozycji : @Model.Where(p => p.IsActive == true).Count() </td>
+                <td> Wartość całk. = @ViewBag.SumaWartosciAktywnychPozycji </td>
+            </tr>
+            <tr>
+                <td> Pozycje Nieaktywne </td>
+                <td> Liczba pozycji : @Model.Where(p => p.IsActive == false).Count() </td>
+                <td> Wartość całk. = @ViewBag.SumaWartosciNieaktywnychPozycj</td>
+            </tr>
+        </tbody>
+            </table>
+
+    }
+
+
 </body>
 </html>

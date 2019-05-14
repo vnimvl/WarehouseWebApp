@@ -25,13 +25,13 @@
         </div>
 
         <div class="form-group col-md-3">
-            <select name="isActive" class="form-control">
-                <option value="null">-</option>
-                <option value="1">Aktywny</option>
-                <option value="0">Nieaktywny</option>
-            </select></div>
+            <select asp-for="IsActive" name="status" class="form-control">
+                <option value="true">Aktywny</option>
+                <option value="false">Nieaktywny</option>
+            </select>
+        </div>
     </div>
-            <button type="submit" class="btn btn-success col-md-2" asp-controller="Product" asp-action="Search">Wyszukaj</button>
+            <button type="submit" class="btn btn-success col-md-2" asp-controller="Product" asp-action="Search" asp-route-type="1" >Wyszukaj</button>
 </form>
 <br />
 @{

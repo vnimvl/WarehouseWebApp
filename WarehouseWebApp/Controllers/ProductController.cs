@@ -59,7 +59,7 @@ namespace WarehouseWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(int serial, string dataStart, string dataKoniec, string nazwa, bool? status)
+        public IActionResult Search(int serial, string dataStart, string dataKoniec, string nazwa, bool status)
         {
             if(serial>0 && dataStart !=null && dataKoniec==null)
             {
@@ -78,7 +78,7 @@ namespace WarehouseWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Podglad(DateTime dataStart, int serial, string nazwa, bool? status)
+        public IActionResult Podglad(DateTime dataStart, int serial, string nazwa, bool status)
         {
             ViewBag.kategorie = _context.Kategorie.ToList();
             ViewBag.dataStart = dataStart;

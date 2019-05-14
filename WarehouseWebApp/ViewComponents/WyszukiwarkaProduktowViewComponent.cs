@@ -17,12 +17,19 @@ namespace WarehouseWebApp.ViewComponents
 
         public IViewComponentResult Invoke(int serial, DateTime dataStart, DateTime dataKoniec, string nazwa, bool? status, int type)
         {
-            
-            var konkretneProdukty = _produktyCtx.Produkty.Where(p => p.SerialNumber == serial).ToList();
+            if (type == 1) {
+                var wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec && p.IsActive == status && p.SerialNumber==serial).ToList();
+
+                if (nazwa != null)
+                {
+                    wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec && p.Name == nazwa && p.IsActive == status && p.SerialNumber == serial).ToList();
+
+                }
+                return View("WybranyDzien", wybraneProdukty);
+            }
+                var konkretneProdukty = _produktyCtx.Produkty.Where(p => p.SerialNumber == serial).ToList();
             if (serial > 0 || dataStart == null || dataKoniec == null)
             {
-
-
                 return View("Default", konkretneProdukty);
             } else
             if (serial == 0 || dataStart != null || dataKoniec != null)
@@ -33,29 +40,6 @@ namespace WarehouseWebApp.ViewComponents
                 ViewBag.SumaWartosciNieaktywnychPozycj = _produktyCtx.SumujWartosciNieaktywnychPozycji(produktyZDanegoDnia);
 
                 return View("WybranyDzien", produktyZDanegoDnia);
-            } else
-                if (type == 1)
-            {
-
-                var wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec || p.Name==nazwa || p.IsActive==status).ToList();
-
-                if( status != null)
-                {
-                    wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec || p.Name == nazwa && p.IsActive == status).ToList();
-
-                }
-                if(nazwa != null)
-                {
-                     wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec && p.Name == nazwa || p.IsActive == status).ToList();
-
-                }
-
-                if(nazwa != null && status != null)
-                {
-                    wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec && p.Name == nazwa && p.IsActive == status).ToList();
-
-                }
-                return View("WybranyDzien", wybraneProdukty);
             }
  
              return View("Default", konkretneProdukty);

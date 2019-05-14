@@ -1,0 +1,45 @@
+﻿@model WarehouseWebApp.Models.Products
+
+@{
+    ViewData["Title"] = "RaportZDnia";
+}
+
+<h2>Podgląd</h2>
+<br />
+<br />
+<form method="post">
+    <div class="form-group col-md-10">
+        <div class="form-group col-md-3">
+            <input type="date" name="dataStart" class="form-control" placeholder="wybierz date" />
+            <span asp-validation-for="ShipmenDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-3">
+            <input name="serial" class="form-control" placeholder="Kod produktu" required />
+            <span asp-validation-for="SerialNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-3">
+            <input name="Name" class="form-control" placeholder="Nazwa produktu" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-3">
+            <select name="isActive" class="form-control">
+                <option value="null">-</option>
+                <option value="1">Aktywny</option>
+                <option value="0">Nieaktywny</option>
+            </select></div>
+    </div>
+            <button type="submit" class="btn btn-success col-md-2" asp-controller="Product" asp-action="Search">Wyszukaj</button>
+</form>
+<br />
+@{
+    var Query1 = ViewBag.dataStart;
+    var Query2 = ViewBag.dataKoniec;
+    var Query3 = ViewBag.serial;
+    var Query4 = ViewBag.nazwa;
+    bool? Query5 = ViewBag.status;
+    int Type = ViewBag.type;
+}
+@await Component.InvokeAsync("WyszukiwarkaProduktow", new { dataStart = Query1, dataKoniec=Query2, serial = Query3, nazwa = Query4, status = Query5, type=Type })

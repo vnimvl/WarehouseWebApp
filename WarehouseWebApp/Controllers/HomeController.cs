@@ -38,6 +38,12 @@ namespace WarehouseWebApp.Controllers
             return View();
         }
 
+        public IActionResult Podglad() // podglad produktow klasyczny z kryteriami wyszukiwania
+        {
+            return View();
+        }
+
+
         [Authorize]
         public IActionResult MainPageTest()
         {

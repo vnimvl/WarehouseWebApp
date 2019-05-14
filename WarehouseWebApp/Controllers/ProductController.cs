@@ -59,8 +59,12 @@ namespace WarehouseWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(int serial, string dataStart, string dataKoniec)
+        public IActionResult Search(int serial, string dataStart, string dataKoniec, string nazwa, bool? status)
         {
+            if(serial>0 && dataStart !=null && dataKoniec==null)
+            {
+                return RedirectToAction("Podglad", new { dataStart, serial, nazwa, status });
+            }
             if(serial > 0)
             {
                 return RedirectToAction("Index", new { serial });
@@ -69,7 +73,21 @@ namespace WarehouseWebApp.Controllers
             {
                 return RedirectToAction("RaportZDnia", new { dataStart,dataKoniec });
             }
+
             else return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Podglad(DateTime dataStart, int serial, string nazwa, bool? status)
+        {
+            ViewBag.kategorie = _context.Kategorie.ToList();
+            ViewBag.dataStart = dataStart;
+            ViewBag.dataKoniec = dataStart.AddDays(1);
+            ViewBag.serial = serial;
+            ViewBag.nazwa = nazwa; // ?
+            ViewBag.status = status; // ?
+            ViewBag.type = 1;
+            return View();
         }
 
         [HttpGet]

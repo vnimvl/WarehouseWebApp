@@ -36,7 +36,25 @@ namespace WarehouseWebApp.ViewComponents
             } else
                 if (type == 1)
             {
+
                 var wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec || p.Name==nazwa || p.IsActive==status).ToList();
+
+                if( status != null)
+                {
+                    wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec || p.Name == nazwa && p.IsActive == status).ToList();
+
+                }
+                if(nazwa != null)
+                {
+                     wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec && p.Name == nazwa || p.IsActive == status).ToList();
+
+                }
+
+                if(nazwa != null && status != null)
+                {
+                    wybraneProdukty = _produktyCtx.Produkty.Where(p => p.ShipmenDate >= dataStart && p.ShipmenDate <= dataKoniec && p.Name == nazwa && p.IsActive == status).ToList();
+
+                }
                 return View("WybranyDzien", wybraneProdukty);
             }
  

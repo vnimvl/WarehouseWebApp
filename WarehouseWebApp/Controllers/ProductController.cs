@@ -59,11 +59,11 @@ namespace WarehouseWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(int serial, string dataStart, string dataKoniec, string nazwa, bool status)
+        public IActionResult Search(int serial, DateTime? dataStart, string dataKoniec, string nazwa, bool status)
         {
-            if(serial>0 && dataStart !=null && dataKoniec==null)
+            if(serial>0 && dataStart !=null && dataKoniec==null || nazwa!=null)
             {
-                return RedirectToAction("Podglad", new { dataStart, serial, nazwa, status });
+                return RedirectToAction("Podglad", new { dataStart, serial, nazwa, status, type=1 });
             }
             if(serial > 0)
             {
@@ -78,15 +78,23 @@ namespace WarehouseWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Podglad(DateTime dataStart, int serial, string nazwa, bool status)
+        public IActionResult Podglad(DateTime? dataStart, int serial, string nazwa, bool status, int type)
         {
             ViewBag.kategorie = _context.Kategorie.ToList();
             ViewBag.dataStart = dataStart;
-            ViewBag.dataKoniec = dataStart.AddDays(1);
+            if (dataStart == null)
+            {
+                ViewBag.dataKoniec = null;
+            }
+            else
+            {
+                DateTime dataStart2 = Convert.ToDateTime(dataStart.ToString());
+                ViewBag.dataKoniec = dataStart2.AddDays(1);
+            }
             ViewBag.serial = serial;
             ViewBag.nazwa = nazwa; // ?
             ViewBag.status = status; // ?
-            ViewBag.type = 1;
+            ViewBag.type = type;
             return View();
         }
 

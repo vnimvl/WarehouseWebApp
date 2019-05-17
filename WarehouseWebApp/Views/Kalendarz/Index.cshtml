@@ -58,18 +58,29 @@
 
                 eventClick: function (info) {
                     $('#modalTitle').html(info.event.title + " | " + (info.event.start.toLocaleDateString()));
-
                     $.ajax({
                         type: "GET",
                         url: "/kalendarz/GetDescription/" + info.event.title,
                         success: function (description) {
                             $('#modalBody').html(description);
+
+
+                            $(document).ready(function () {
+                                $("#delete").click(function () {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/kalendarz/Delete/" + info.event.title, success: function (result) {
+                                            alert("Usunięto wpis z kalendarza")
+                                        }
+                                    });
+                                });
+                            });
+
                         },
                         error: function (error) {
                             $('#modalBody').html("failed to recieve description");;
                         }
                     })
-                    //  $('#czasDostawy').html("Przewidywana data dostawy:" + (info.event.start).getDate() + "/" + (info.event.start).getMonth() + "/"+(info.event.start).getYear()+".")
                     $('#calendarModal').modal();
                 },
 
@@ -100,6 +111,7 @@
             </div>
             <div id="modalBody" class="modal-body"></div>
             <div class="modal-footer">
+                <button id="delete" type="button" class="btn btn-danger" data-dismiss="modal">Usuń</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

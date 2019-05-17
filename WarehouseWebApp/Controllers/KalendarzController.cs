@@ -17,13 +17,27 @@ namespace WarehouseWebApp.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var model = _context.Events;
+            return View(model);
+        }
+
+        public IActionResult Dodaj()
+        {
+            var model = _context.Events.ToList();
+            return View(model);
         }
 
         public JsonResult GetEvents()
         {
             var events = _context.Events.ToList();
             return new JsonResult(events);
+        }
+
+        [Route("Kalendarz/GetDescription/{title}")]
+        public String GetDescription(string title)
+        {
+            string opis = _context.Events.Where(e => e.Title == title).FirstOrDefault().Description.ToString();
+            return opis;
         }
 
     }

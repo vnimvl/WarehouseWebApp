@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<WarehouseWebApp.Models.Event>
 @{
     ViewData["Title"] = "Kalendarz";
 }
@@ -11,24 +11,13 @@
 <script src="~/fullcalendar-4.1.0/packages/daygrid/main.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="~/fullcalendar-4.1.0/packages/moment/main.js"></script>
-@*<script>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: ['dayGrid']
-            });
-
-            calendar.render();
-        });
-
-    </script>*@
 <script>
 
     $(document).ready(function () {
 
         var data = [];
+
         $.ajax({
             type: "GET",
             url: "/kalendarz/GetEvents",
@@ -37,7 +26,7 @@
                     data.push({
                         id: v.EventID,
                         title: v.Title,
-                        description: v.Description,
+                        desc: v.Description,
                         start: v.Start,
                         end: v.End != null ? v.End : null,
                         color: v.color,
@@ -64,39 +53,52 @@
                     right: 'dayGridDay,dayGridWeek,dayGridMonth'
                 },
                 editable: true,
+
                 events: data,
-                //eventRender: function (info) {
-                //    var tooltip = new Tooltip(info.el, {
-                //        title: info.event.extendedProps.description,
-                //        placement: 'top',
-                //        trigger: 'hover',
-                //        container: 'body'
-                //    });
-                //}
 
-                eventClick: function (data) {
-                    $('#modalTitle').html(data.title);
-                    $('#modalBody').html(data.description);
-                        $('#calendarModal').modal();
+                eventClick: function (info) {
+                    $('#modalTitle').html(info.event.title + " | " + (info.event.start.toLocaleDateString()));
 
-                }
+                    $.ajax({
+                        type: "GET",
+                        url: "/kalendarz/GetDescription/" + info.event.title,
+                        success: function (description) {
+                            $('#modalBody').html(description);
+                        },
+                        error: function (error) {
+                            $('#modalBody').html("failed to recieve description");;
+                        }
+                    })
+                    //  $('#czasDostawy').html("Przewidywana data dostawy:" + (info.event.start).getDate() + "/" + (info.event.start).getMonth() + "/"+(info.event.start).getYear()+".")
+                    $('#calendarModal').modal();
+                },
+
+
             });
 
             calendar.render();
         }
 
+
     })
 </script>
-<br />
+<br />      
 <div id='calendar'></div>
+<br />
+  <div class="form-group col-md-2">
+    <a asp-action="Dodaj" asp-controller="Kalendarz" class="btn btn-sm btn-success">
+        Dodaj nową dostawe
+    </a>
+</div>
+<br />
 <div id="calendarModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
-                <h4 id="modalTitle" class="modal-title">tutaj powinien byc tytul</h4>
+                <h4 id="modalTitle" class="modal-title"></h4>
             </div>
-            <div id="modalBody" class="modal-body"> tutaj opis </div>
+            <div id="modalBody" class="modal-body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>

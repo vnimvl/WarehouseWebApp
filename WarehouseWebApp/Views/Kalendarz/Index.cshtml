@@ -70,7 +70,8 @@
                                     $.ajax({
                                         type: "POST",
                                         url: "/kalendarz/Delete/" + info.event.title, success: function (result) {
-                                            alert("Usunięto wpis z kalendarza")
+                                            alert("poprawnie usunięto wpis");
+                                            window.location.reload(true);
                                         }
                                     });
                                 });

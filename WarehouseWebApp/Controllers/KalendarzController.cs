@@ -53,7 +53,13 @@ namespace WarehouseWebApp.Controllers
         [Route("Kalendarz/GetDescription/{title}")]
         public String GetDescription(string title)
         {
-            string opis = _context.Events.Where(e => e.Title == title).FirstOrDefault().Description.ToString();
+            string opis = null;
+            var Dostawa = _context.Events.Where(e => e.Title == title).FirstOrDefault();
+            if(Dostawa.Description != null)
+            {
+                opis = Dostawa.Description.ToString();
+            }
+      
             return opis;
         }
 

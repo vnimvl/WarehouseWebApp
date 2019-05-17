@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewData["Title"] = "Kalendarz";
+}
+<script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+<link href="~/fullcalendar-4.1.0/packages/core/main.css" rel="stylesheet" />
+<link href="~/fullcalendar-4.1.0/packages/daygrid/main.css" rel="stylesheet" />
+<script src="~/fullcalendar-4.1.0/packages/core/main.js"></script>
+<script src="~/fullcalendar-4.1.0/packages/daygrid/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="~/fullcalendar-4.1.0/packages/moment/main.js"></script>
+@*<script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid']
+            });
+
+            calendar.render();
+        });
+
+    </script>*@
+<script>
+
+    $(document).ready(function () {
+
+        var data = [];
+        $.ajax({
+            type: "GET",
+            url: "/kalendarz/GetEvents",
+            success: function (data) {
+                $.each(data, function (i, v) {
+                    data.push({
+                        id: v.EventID,
+                        title: v.Title,
+                        description: v.Description,
+                        start: v.Start,
+                        end: v.End != null ? v.End : null,
+                        color: v.color,
+                        textColor: v.textColor,
+                        allDay: v.IsFullDay
+                    });
+                })
+                GenerateCalendar(data);
+            },
+            error: function (error) {
+                alert('failed');
+            }
+        })
+
+        function GenerateCalendar(data) {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid'],
+                timeFormat: 'HH(:mm)',
+                defaultView: 'dayGridMonth',
+                header: {
+                    left: 'prev,next,today',
+                    center: 'title',
+                    right: 'dayGridDay,dayGridWeek,dayGridMonth'
+                },
+                editable: true,
+                events: data,
+                //eventRender: function (info) {
+                //    var tooltip = new Tooltip(info.el, {
+                //        title: info.event.extendedProps.description,
+                //        placement: 'top',
+                //        trigger: 'hover',
+                //        container: 'body'
+                //    });
+                //}
+
+                eventClick: function (data) {
+                    $('#modalTitle').html(data.title);
+                    $('#modalBody').html(data.description);
+                        $('#calendarModal').modal();
+
+                }
+            });
+
+            calendar.render();
+        }
+
+    })
+</script>
+<br />
+<div id='calendar'></div>
+<div id="calendarModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title">tutaj powinien byc tytul</h4>
+            </div>
+            <div id="modalBody" class="modal-body"> tutaj opis </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseWebApp.Data;
 
 namespace WarehouseWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190520124223_dodanienowejtabeliorderslaczacejproduktyzzamowieniem")]
+    partial class dodanienowejtabeliorderslaczacejproduktyzzamowieniem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,11 +288,13 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.Property<int>("ProductId");
 
+                    b.Property<int?>("ProductsId");
+
                     b.Property<int>("ZamowienieId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductsId");
 
                     b.HasIndex("ZamowienieId")
                         .IsUnique();
@@ -408,10 +412,9 @@ namespace WarehouseWebApp.Data.Migrations
 
             modelBuilder.Entity("WarehouseWebApp.Models.Order", b =>
                 {
-                    b.HasOne("WarehouseWebApp.Models.Products", "Product")
+                    b.HasOne("WarehouseWebApp.Models.Products", "Products")
                         .WithMany("Orders")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductsId");
 
                     b.HasOne("WarehouseWebApp.Models.Zamowienie", "Zamowienie")
                         .WithOne("Order")

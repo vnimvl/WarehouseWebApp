@@ -15,9 +15,9 @@ namespace WarehouseWebApp.Models
         public int VAT { get; set; }
         public string Description { get; set; }
         public DateTime ShipmenDate { get; set; }
-
-        public int? KategorieId { get; set; }
-
         public bool IsActive { get; set; }
+        
+        public int? KategorieId { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

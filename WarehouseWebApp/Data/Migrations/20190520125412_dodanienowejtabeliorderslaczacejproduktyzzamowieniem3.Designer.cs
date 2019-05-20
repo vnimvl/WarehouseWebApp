@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseWebApp.Data;
 
 namespace WarehouseWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190520125412_dodanienowejtabeliorderslaczacejproduktyzzamowieniem3")]
+    partial class dodanienowejtabeliorderslaczacejproduktyzzamowieniem3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,8 +294,7 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ZamowienieId")
-                        .IsUnique();
+                    b.HasIndex("ZamowienieId");
 
                     b.ToTable("Orders");
                 });
@@ -414,8 +415,8 @@ namespace WarehouseWebApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WarehouseWebApp.Models.Zamowienie", "Zamowienie")
-                        .WithOne("Order")
-                        .HasForeignKey("WarehouseWebApp.Models.Order", "ZamowienieId")
+                        .WithMany("Orders")
+                        .HasForeignKey("ZamowienieId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

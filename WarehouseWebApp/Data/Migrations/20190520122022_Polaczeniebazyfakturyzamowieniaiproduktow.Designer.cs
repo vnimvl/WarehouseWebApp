@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseWebApp.Data;
 
 namespace WarehouseWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190520122022_Polaczeniebazyfakturyzamowieniaiproduktow")]
+    partial class Polaczeniebazyfakturyzamowieniaiproduktow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,28 +278,6 @@ namespace WarehouseWebApp.Data.Migrations
                     b.ToTable("Klienci");
                 });
 
-            modelBuilder.Entity("WarehouseWebApp.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("LiczbaSztuk");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<int>("ZamowienieId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ZamowienieId")
-                        .IsUnique();
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("WarehouseWebApp.Models.Products", b =>
                 {
                     b.Property<int>("Id")
@@ -343,7 +323,11 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.Property<bool>("IsDone");
 
+                    b.Property<int?>("ProductsId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductsId");
 
                     b.ToTable("Zamowienia");
                 });
@@ -406,24 +390,18 @@ namespace WarehouseWebApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WarehouseWebApp.Models.Order", b =>
-                {
-                    b.HasOne("WarehouseWebApp.Models.Products", "Product")
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WarehouseWebApp.Models.Zamowienie", "Zamowienie")
-                        .WithOne("Order")
-                        .HasForeignKey("WarehouseWebApp.Models.Order", "ZamowienieId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("WarehouseWebApp.Models.Products", b =>
                 {
                     b.HasOne("WarehouseWebApp.Models.Kategorie")
                         .WithMany("Produkt")
                         .HasForeignKey("KategorieId");
+                });
+
+            modelBuilder.Entity("WarehouseWebApp.Models.Zamowienie", b =>
+                {
+                    b.HasOne("WarehouseWebApp.Models.Products", "Products")
+                        .WithMany("Zamowienia")
+                        .HasForeignKey("ProductsId");
                 });
 #pragma warning restore 612, 618
         }

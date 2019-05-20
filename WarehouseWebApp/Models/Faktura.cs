@@ -10,7 +10,10 @@ namespace WarehouseWebApp.Models
         public int Id { get; set; } // PK
         public int NumerFaktury { get; set; } // nuemr faktruy
         public string KodFaktury { get; set; } // kod faktury ? dzień/miesiac/rok/numer
-        public int KlientId { get; set; }  // FK relacji przypisania faktury do wybranego klienta pobrana z zamówienia
 
+        public int KlientId { get; set; }
+        public virtual Klient Klient { get; set; }
+        public int ZamowienieId { get; set; }
+        public virtual Zamowienie Zamowienie { get; set; }
     }
 }

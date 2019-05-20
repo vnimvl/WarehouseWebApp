@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseWebApp.Data;
 
 namespace WarehouseWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190518115641_dodanie_polaczenia_zamowienia_z_produktami_test1")]
+    partial class dodanie_polaczenia_zamowienia_z_produktami_test1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,31 +211,6 @@ namespace WarehouseWebApp.Data.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("WarehouseWebApp.Models.Faktura", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("KlientId");
-
-                    b.Property<string>("KodFaktury");
-
-                    b.Property<int>("NumerFaktury");
-
-                    b.Property<int>("ZamowienieId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KlientId")
-                        .IsUnique();
-
-                    b.HasIndex("ZamowienieId")
-                        .IsUnique();
-
-                    b.ToTable("Faktury");
-                });
-
             modelBuilder.Entity("WarehouseWebApp.Models.Kategorie", b =>
                 {
                     b.Property<int>("Id")
@@ -276,28 +253,6 @@ namespace WarehouseWebApp.Data.Migrations
                     b.ToTable("Klienci");
                 });
 
-            modelBuilder.Entity("WarehouseWebApp.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("LiczbaSztuk");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<int>("ZamowienieId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ZamowienieId")
-                        .IsUnique();
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("WarehouseWebApp.Models.Products", b =>
                 {
                     b.Property<int>("Id")
@@ -322,9 +277,13 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.Property<int>("VAT");
 
+                    b.Property<int?>("ZamowienieId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("KategorieId");
+
+                    b.HasIndex("ZamowienieId");
 
                     b.ToTable("Produkty");
                 });
@@ -339,13 +298,19 @@ namespace WarehouseWebApp.Data.Migrations
 
                     b.Property<DateTime>("DataZamowienia");
 
+                    b.Property<int?>("FakturaId");
+
                     b.Property<bool>("IsCompleted");
 
                     b.Property<bool>("IsDone");
 
+                    b.Property<int>("KlientId");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Zamowienia");
+                    b.HasIndex("KlientId");
+
+                    b.ToTable("Zamowienie");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -393,37 +358,23 @@ namespace WarehouseWebApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WarehouseWebApp.Models.Faktura", b =>
-                {
-                    b.HasOne("WarehouseWebApp.Models.Klient", "Klient")
-                        .WithOne("Faktura")
-                        .HasForeignKey("WarehouseWebApp.Models.Faktura", "KlientId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WarehouseWebApp.Models.Zamowienie", "Zamowienie")
-                        .WithOne("Faktura")
-                        .HasForeignKey("WarehouseWebApp.Models.Faktura", "ZamowienieId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WarehouseWebApp.Models.Order", b =>
-                {
-                    b.HasOne("WarehouseWebApp.Models.Products", "Product")
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WarehouseWebApp.Models.Zamowienie", "Zamowienie")
-                        .WithOne("Order")
-                        .HasForeignKey("WarehouseWebApp.Models.Order", "ZamowienieId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("WarehouseWebApp.Models.Products", b =>
                 {
                     b.HasOne("WarehouseWebApp.Models.Kategorie")
                         .WithMany("Produkt")
                         .HasForeignKey("KategorieId");
+
+                    b.HasOne("WarehouseWebApp.Models.Zamowienie")
+                        .WithMany("Produkty")
+                        .HasForeignKey("ZamowienieId");
+                });
+
+            modelBuilder.Entity("WarehouseWebApp.Models.Zamowienie", b =>
+                {
+                    b.HasOne("WarehouseWebApp.Models.Klient")
+                        .WithMany("Zamowienia")
+                        .HasForeignKey("KlientId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

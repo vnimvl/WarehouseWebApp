@@ -16,5 +16,7 @@ namespace WarehouseWebApp.Models
         public string Miasto { get; set; }
         public long NIP { get; set; }
         public string Emial { get; set; }
+
+        public virtual Faktura Faktura { get; set; }
     }
 }

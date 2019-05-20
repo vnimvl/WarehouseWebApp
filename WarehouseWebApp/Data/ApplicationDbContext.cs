@@ -17,5 +17,8 @@ namespace WarehouseWebApp.Data
         public DbSet<Klient> Klienci { get; set; }
         public DbSet<Kategorie> Kategorie { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Faktura> Faktury { get; set; }
+        public DbSet<Zamowienie> Zamowienia { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

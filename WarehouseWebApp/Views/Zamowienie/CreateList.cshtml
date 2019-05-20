@@ -18,11 +18,9 @@
             <div class="form-group">
                 <label asp-for="LiczbaSztuk" class="control-label"></label>
                 <input asp-for="LiczbaSztuk" class="form-control" />
-                <span asp-validation-for="LiczbaSztuk" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ZamowienieId" class="control-label"></label>
-                <input asp-for="ZamowienieId" disabled class="form-control" value="@IdZamowienia" />
+                <input asp-for="ZamowienieId" class="form-control" value="@IdZamowienia" type="hidden" />
                 <span asp-validation-for="ZamowienieId" class="text-danger"></span>
             </div>
             <div class="form-group">

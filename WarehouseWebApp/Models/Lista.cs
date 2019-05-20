@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WarehouseWebApp.Models
 {
-    public class Order
+    public class Lista
     {
         public int Id { get; set; }
         public int LiczbaSztuk { get; set; }

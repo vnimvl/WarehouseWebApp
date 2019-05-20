@@ -34,6 +34,13 @@ namespace WarehouseWebApp.Controllers
             var wszyscyKlienci = _context.Klienci;
             return View(wszyscyKlienci);
         }
+        [HttpGet]
+        [Route("Client/GetClientData/{id}")]
+        public JsonResult GetClientData(int id)
+        {
+            var data = _context.Klienci.Where(c=>c.Id==id).FirstOrDefault();
+            return new JsonResult(data);
+        }
 
         [HttpPost]
         public IActionResult Create(Klient klient)

@@ -1,0 +1,50 @@
+﻿@model WarehouseWebApp.Models.PodsumowanieZamowieniaViewModel
+@{
+    ViewData["Title"] = "SzczegolyZamowienia";
+}
+
+<h2>SzczegolyZamowienia</h2>
+<center>
+    @{
+        var zamowienie = Model.Zamowienia;
+        var listaProduktow = Model.Produkty;
+        var szczegolyZamowienia = Model.Lista;
+        int i = 0;
+        foreach (var produkt in listaProduktow)
+        {
+            i++;
+            <text> --------------------------------------- [ POZYCJA # </text> @i;<text> ] --------------------------------------- </text>
+            <br />
+            <text> ----------------------------------- WYBRANY PRODUKT ----------------------------------- </text>
+            <br />
+            <text> Nazwa: </text> @produkt.Name.ToString();
+            <br />
+            <text> Cena detaliczna: </text> @produkt.Price.ToString()
+            <br />
+            <text> Stan magazynowy </text> @produkt.Count.ToString();
+            <br />
+            <text> ------------------------------------------ ZAMÓWIENIE ----------------------------------------- </text>
+            <br />
+            var iloscSztuk = 0;
+            var cenalacznaproduktu = 0.0;
+
+            foreach (var item in szczegolyZamowienia)
+            {
+                if (item.ProductId == produkt.Id)
+                {
+                    iloscSztuk = item.LiczbaSztuk;
+                    <text> Liczba sztuk: </text> @iloscSztuk;
+                    <br />
+                    cenalacznaproduktu = produkt.Price * iloscSztuk;
+                    <text> Łączna kwota: </text> @cenalacznaproduktu;
+                }
+            }
+
+            <br /><br /><br />
+        }
+    }
+    <a asp-action="Index" asp-controller="Faktura" class="btn btn-sm btn-success">
+        Wystaw Fakturę [W.I.P.]
+    </a>
+
+</center>

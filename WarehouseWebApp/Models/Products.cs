@@ -18,6 +18,6 @@ namespace WarehouseWebApp.Models
         public bool IsActive { get; set; }
         
         public int? KategorieId { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Lista> Lista { get; set; }
     }
 }

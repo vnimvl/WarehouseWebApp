@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WarehouseWebApp.Data;
 
 namespace WarehouseWebApp.Controllers
@@ -16,9 +17,11 @@ namespace WarehouseWebApp.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? idZamowienia)
         {
             ViewBag.Klienci = _context.Klienci;
+
+            ViewBag.Zamowienie = idZamowienia;  
             return View();
         }
     }

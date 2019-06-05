@@ -39,12 +39,13 @@
                     <text> Łączna kwota: </text> @cenalacznaproduktu;
                 }
             }
-
-            <br /><br /><br />
         }
     }
-    <a asp-action="Index" asp-controller="Faktura" class="btn btn-sm btn-success">
-        Wystaw Fakturę [W.I.P.]
+    <br /><br /><br />
+    @ViewBag.idZamowienia
+    @ViewBag.IdZamowienia
+    <a asp-action="Index" asp-controller="Faktura" asp-route-idZamowienia="@ViewBag.IdZamowienia" class="btn btn-sm btn-success">
+        Wystaw Fakturę
     </a>
 
 </center>

@@ -1,4 +1,4 @@
-﻿@*@model WarehouseWebApp.Models.FakturaViewModel*@
+﻿@model IQueryable<WarehouseWebApp.Models.Zamowienie>
 
 @{
     ViewData["Title"] = "Index";
@@ -40,7 +40,9 @@
         </div>
         <div class="form-group col-md-2">
             <label class="control-label" style="color:white">+</label>
-            <button name="submit" class="btn btn-primary" type="submit" disabled>+ Dodaj klienta</button>
+            <button asp-action="NewClient" asp-controller="Client" class="btn btn-sm btn-primary">
+                + Dodaj klienta
+            </button>
         </div>
     </div>
     <div class="form-group col-md-10">
@@ -74,31 +76,31 @@
         </div>
         <div class="form-group col-md-3">
             <label class="control-label">Adres e-mail</label>
-            <input type="text" name="dataStart" id="email"  class="form-control" placeholder="e-mail" disabled />
+            <input type="text" name="dataStart" id="email" class="form-control" placeholder="e-mail" disabled />
         </div>
     </div>
     <div class="form-group col-md-10">
-        <div class="form-group col-md-5">
+        <div class="form-group col-md-10">
             <label class="control-label">Produkty</label>
-            <textarea type="text" name="dataStart" class="form-control" placeholder="Produkty" disabled></textarea>
+            <textarea type="text" id="listaProduktowTextBox" class="form-control" placeholder="Produkty" value="@ViewBag.Zamowienie" disabled></textarea>
         </div>
-        <div class="form-group col-md-5">
+        @*<div class="form-group col-md-5">
             <label class="control-label">Komentarz</label>
             <textarea type="search" name="dataStart" class="form-control" placeholder="Komentarz"></textarea>
-        </div>
+        </div>*@
     </div>
     <div class="form-group col-md-10">
         <div class="form-group col-md-2">
             <label class="control-label">Netto</label>
-            <input type="text" name="dataStart" class="form-control" disabled />
+            <input type="text" name="dataStart" id="Netto"class="form-control" disabled />
         </div>
         <div class="form-group col-md-2">
             <label class="control-label">Vat</label>
-            <input type="text" name="dataStart" class="form-control" disabled />
+            <input type="text" name="dataStart" id="Vat" class="form-control" disabled />
         </div>
         <div class="form-group col-md-2">
             <label class="control-label">Brutto</label>
-            <input type="text" name="dataStart" class="form-control" disabled />
+            <input type="text" name="dataStart" id="Brutto"class="form-control" disabled />
         </div>
         <div class="form-group col-md-4">
             <label class="control-label">Data wystawienia faktury</label>
@@ -123,47 +125,102 @@
         </div>
     </div>
 </form>
-   
+
+<input id="numerzamowienia" value="@ViewBag.Zamowienie" hidden disabled>
+
 
 <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
         crossorigin="anonymous"></script>
 <script>
-        $("#klientSelect").change(function () {
-            var SelectedClient = document.getElementById('klientSelect').value;
+    $("#klientSelect").change(function () {
+        var SelectedClient = document.getElementById('klientSelect').value;
 
-            $.ajax({
-                type: "GET",
-                url: "/Client/GetClientData/" + SelectedClient,
-                success: function (data) {
-                    var ClientData = {
-                        "nazwa": data.nazwaDluga,
-                        "ulica": data.ulica,
-                        "numer": data.numer,
-                        "kod": data.kodPocztowy,
-                        "miasto": data.miasto,
-                        "nip": data.nip,
-                        "email": data.emial
-                    }
-                    
-                AktualizujDaneKlienta(ClientData);
-                },
-                error: function (error) {
-                    alert('Błąd poczas ładowania danych klienta');
+        $.ajax({
+            type: "GET",
+            url: "/Client/GetClientData/" + SelectedClient,
+            success: function (data) {
+                var ClientData = {
+                    "nazwa": data.nazwaDluga,
+                    "ulica": data.ulica,
+                    "numer": data.numer,
+                    "kod": data.kodPocztowy,
+                    "miasto": data.miasto,
+                    "nip": data.nip,
+                    "email": data.emial
                 }
-            })
 
-            function AktualizujDaneKlienta(data) {
-                $("#NazwaFirmy").val(data.nazwa);
-                $("#Ulica").val(data.ulica);
-                $("#Numer").val(data.numer);
-                $("#KodPocztowy").val(data.kod);
-                $("#Miasto").val(data.miasto);
-                $("#nip").val(data.nip);
-                $("#email").val(data.email);
-
+                AktualizujDaneKlienta(ClientData);
+            },
+            error: function (error) {
+                alert('Błąd poczas ładowania danych klienta');
             }
+        })
 
-        });
-
+        function AktualizujDaneKlienta(data) {
+            $("#NazwaFirmy").val(data.nazwa);
+            $("#Ulica").val(data.ulica);
+            $("#Numer").val(data.numer);
+            $("#KodPocztowy").val(data.kod);
+            $("#Miasto").val(data.miasto);
+            $("#nip").val(data.nip);
+            $("#email").val(data.email);
+        }
+    });
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+    $(function () {
+        var wartoscZamowieniaNetto = 0;
+        var wartoscZamowieniaVat = 0;
+        var wartoscZamowieniaBrutto = 0;
+        var bla = $('#numerzamowienia').val();
+        $.ajax({
+            type: "GET",
+            url: "/Zamowienie/GetZamowienieData/" + bla,
+            success: function (data) {
+                $.each(data, function (index, value) {
+                    console.log(value);
+                    $("#listaProduktowTextBox").append('[' + (index+1) + '] szt.:' + value.iloscWZamowieniu + ' | Serial:' + value.serialNumber + ' | Produkt:' + value.name + ' | netto:' + value.cenaNettoCalosci + ' | Vat:' + value.cenaVatCalosci + ' | Brutto:' + value.cenaBruttoCalosci+ '\n');
+                    wartoscZamowieniaNetto += value.cenaNettoCalosci;
+                    wartoscZamowieniaVat += value.cenaVatCalosci;
+                    wartoscZamowieniaBrutto += value.cenaBruttoCalosci;
+                });
+                function Round(n, k) {
+                    var factor = Math.pow(10, k);
+                    return Math.round(n * factor) / factor;
+                }
+                $("#Netto").val(Round(wartoscZamowieniaNetto,2) +'zł');
+                $("#Vat").val(Round(wartoscZamowieniaVat,2)+'zł');
+                $("#Brutto").val(Round(wartoscZamowieniaBrutto,2)+'zł');
+            },
+            error: function (error) {
+                alert('Błąd poczas ładowania danych produktow');
+            }
+        })        
+    });
 </script>
+
+
+@*<html>
+<head>
+    <script type="text/javascript">
+        function displayResult() {
+            document.getElementById("myTable").insertRow(-1).innerHTML = '<td>1</td><td>2</td>';
+        }
+    </script>
+</head>
+
+<body>
+    <table id="myTable" border="1">
+        <tr>
+            <td>cell 1</td>
+            <td>cell 2</td>
+        </tr>
+        <tr>
+            <td>cell 3</td>
+            <td>cell 4</td>
+        </tr>
+    </table>
+    <br />
+    <button type="button" onclick="displayResult()">Insert new row</button>
+</body>
+</html>*@

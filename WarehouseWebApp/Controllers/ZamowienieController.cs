@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarehouseWebApp.Data;
@@ -9,7 +10,7 @@ using WarehouseWebApp.Models;
 
 namespace WarehouseWebApp.Controllers
 {
-  
+
     public class ZamowienieController : Controller
     {
         private ApplicationDbContext _context;
@@ -42,8 +43,9 @@ namespace WarehouseWebApp.Controllers
 
         //-----------    W.I.P   ------------------------------------------------------ WYŚWIETLANIE LISTY PRODUKTOW ZNAJDUJACYCH SIE W ZAMOWIENIU 
         [HttpGet]
-        public IActionResult SzczegolyZamowienia(int id) 
+        public IActionResult SzczegolyZamowienia(int id)
         {
+            ViewBag.IdZamowienia = id;
             List<Products> ListaProduktow = new List<Products> { };
 
             var Lista = _context.Listy.Where(p => p.ZamowienieId == id).Include(p => p.Product).Select(p => p.Product.Id).ToList();
@@ -59,7 +61,7 @@ namespace WarehouseWebApp.Controllers
                 Produkty = ListaProduktow,
                 Lista = _context.Listy.Where(l => l.ZamowienieId == id).ToList()
             };
-            
+
             // zamowienia
             return View(model); // ma zwracac listy i zamówienia
         }
@@ -80,5 +82,44 @@ namespace WarehouseWebApp.Controllers
             return RedirectToAction("ListaProduktow");
         }
         //----------------------------------------------------------------- 
+        [AllowAnonymous]
+        public JsonResult GetZamowienieData(int id)
+        {
+            List<produktiliczbasztukcs> listaproduktow = new List<produktiliczbasztukcs> { };
+            
+            foreach(var item in _context.Listy.Where(p => p.ZamowienieId == id))
+            {
+                listaproduktow.Add(new produktiliczbasztukcs
+                    {
+                        produktId = item.ProductId,
+                        liczbasztuk = item.LiczbaSztuk
+                    }
+                );
+            }
+
+            List<ListaProduktowZIloscioami> Data = new List<ListaProduktowZIloscioami> { };
+
+            foreach (var item in listaproduktow)
+            {
+                Data.Add(
+                    new ListaProduktowZIloscioami
+                    {
+                        IdProduktu = _context.Produkty.Where(p => p.Id == item.produktId).First().Id,
+                        SerialNumber = _context.Produkty.Where(p => p.Id == item.produktId).First().SerialNumber,
+                        Name = _context.Produkty.Where(p => p.Id == item.produktId).First().Name,
+                        IloscWZamowieniu = item.liczbasztuk,
+                        CenaZaSztuke = _context.Produkty.Where(p => p.Id == item.produktId).First().Price,
+                        Vat = _context.Produkty.Where(p => p.Id == item.produktId).First().VAT,
+                        CenaNettoCalosci = (item.liczbasztuk * _context.Produkty.Where(p => p.Id == item.produktId).First().Price)-((item.liczbasztuk * _context.Produkty.Where(p => p.Id == item.produktId).First().Price) *((Convert.ToDouble(_context.Produkty.Where(p => p.Id == item.produktId).First().VAT.ToString())) / 100.0)),
+                        CenaVatCalosci = (item.liczbasztuk * _context.Produkty.Where(p => p.Id == item.produktId).First().Price)* (Convert.ToDouble(_context.Produkty.Where(p => p.Id == item.produktId).First().VAT.ToString())/100.0),
+                        CenaBruttoCalosci = item.liczbasztuk * _context.Produkty.Where(p => p.Id == item.produktId).First().Price
+                    }
+                );
+            };
+
+            return new JsonResult(Data);
+        }
     }
 }
+
+

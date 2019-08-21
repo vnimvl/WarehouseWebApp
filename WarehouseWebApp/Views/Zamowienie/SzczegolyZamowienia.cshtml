@@ -3,49 +3,79 @@
     ViewData["Title"] = "SzczegolyZamowienia";
 }
 
-<h2>SzczegolyZamowienia</h2>
+<h2>Podsumowanie zamówienia </h2>
 <center>
     @{
+        var calkowita_liczba_produktow = 0;
+        var Laczna_kwota_zamowienia = 0.0;
         var zamowienie = Model.Zamowienia;
         var listaProduktow = Model.Produkty;
         var szczegolyZamowienia = Model.Lista;
         int i = 0;
-        foreach (var produkt in listaProduktow)
-        {
-            i++;
-            <text> --------------------------------------- [ POZYCJA # </text> @i;<text> ] --------------------------------------- </text>
-            <br />
-            <text> ----------------------------------- WYBRANY PRODUKT ----------------------------------- </text>
-            <br />
-            <text> Nazwa: </text> @produkt.Name.ToString();
-            <br />
-            <text> Cena detaliczna: </text> @produkt.Price.ToString()
-            <br />
-            <text> Stan magazynowy </text> @produkt.Count.ToString();
-            <br />
-            <text> ------------------------------------------ ZAMÓWIENIE ----------------------------------------- </text>
-            <br />
-            var iloscSztuk = 0;
-            var cenalacznaproduktu = 0.0;
-
-            foreach (var item in szczegolyZamowienia)
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nazwa produktu</th>
+                <th scope="col">Cena detaliczna</th>
+                <th scope="col">Stan magazynowy</th>
+                <th scope="col">Liczba szt w zamówieniu</th>
+                <th scope="col">Kwota zamówienia</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var produkt in listaProduktow)
             {
-                if (item.ProductId == produkt.Id)
-                {
-                    iloscSztuk = item.LiczbaSztuk;
-                    <text> Liczba sztuk: </text> @iloscSztuk;
-                    <br />
-                    cenalacznaproduktu = produkt.Price * iloscSztuk;
-                    <text> Łączna kwota: </text> @cenalacznaproduktu;
-                }
-            }
-        }
-    }
-    <br /><br /><br />
-    @ViewBag.idZamowienia
-    @ViewBag.IdZamowienia
-    <a asp-action="Index" asp-controller="Faktura" asp-route-idZamowienia="@ViewBag.IdZamowienia" class="btn btn-sm btn-success">
-        Wystaw Fakturę
-    </a>
+                i++;
+             <tr>
+                <th scope="row">@i</th>
+                <td>@produkt.Name.ToString()</td>
+                <td>@produkt.Price.ToString()</td>
+                <td>@produkt.Count.ToString()</td>
 
-</center>
+                @{var iloscSztuk = 0;
+                    var cenalacznaproduktu = 0.0;
+
+                    foreach (var item in szczegolyZamowienia)
+                    {
+                        if (item.ProductId == produkt.Id)
+                        {
+                            iloscSztuk = item.LiczbaSztuk;
+                            calkowita_liczba_produktow += iloscSztuk;
+                            <td> @iloscSztuk</td>
+
+                            cenalacznaproduktu = produkt.Price * iloscSztuk;
+                            Laczna_kwota_zamowienia += cenalacznaproduktu;
+                            <td> @cenalacznaproduktu</td>
+                        }
+                    }
+                }
+             </tr>
+                    }
+             
+            </tbody>
+        </table>
+                    }
+        <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Całkowita ilość produktów</th>
+                <th>Łączna kwota zamówienia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@calkowita_liczba_produktow</td>
+                <td>@Laczna_kwota_zamowienia</td>
+            </tr>
+        </tbody>
+    </table>
+        @{/* @ViewBag.idZamowienia
+            @ViewBag.IdZamowienia */}
+        
+            <a asp-action="Index" asp-controller="Faktura" asp-route-idZamowienia="@ViewBag.IdZamowienia" class="btn btn-sm btn-success">
+            Wystaw Fakturę
+        </a>
+
+    </center>
